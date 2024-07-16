@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 
 const Reset = styled.input.attrs({
-    type: 'submit',
+    type: 'button',
     name: 'Btn_Reset',
     value: '초기화'
 })`

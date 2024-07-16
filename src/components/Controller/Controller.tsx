@@ -5,7 +5,7 @@ import ButtonCRUD from '../Buttons/ButtonCRUD'
 import { Link } from 'react-router-dom';
 
 const ControllerWrapper = styled.div`
-    width: 80%;
+    width: 90%;
     height: 70px;
     border: 2px solid gray;
     border-radius: 10px;
@@ -58,20 +58,12 @@ const Buttons = styled.div`
 `
 
 function Controller() {
-    const handleCreate = () => {
-        alert("create\nstatistics/popup으로 이동");
-    }
-    
     const handleRead = () => {
-        alert("read\n조회 로직 구현 예정");
-    }
-    
-    const handleUpdate = () => {
-        alert("update\n수정 로직 구현 예정");
+        alert("조회 버튼 클릭");
     }
     
     const handleDelete = () => {
-        alert("delete\n삭제 로직 구현 예정");
+        alert("삭제 버튼 클릭");
     }
     
     return (
@@ -86,12 +78,15 @@ function Controller() {
             </AboveDiv>
             <BelowDiv>
                 <Buttons>
-                    <Link to={'./popup'}>
-                        <ButtonCRUD str={"신규"} onClick={handleCreate}/>
+                    <Link to={'./popup?valueApply=등록신청'}>
+                        <ButtonCRUD valueCRUD={"신규"}/>
                     </Link>
-                    <ButtonCRUD str={"수정"} onClick={handleUpdate}/>
-                    <ButtonCRUD str={"삭제"} onClick={handleDelete}/>
-                    <ButtonCRUD str={"조회"} onClick={handleRead}/>
+                    {/* 추후 수정 로직 구현 시, 선택한 인재의 ID값 파라미터로 넘겨야함 */}
+                    <Link to={'./popup?valueApply=수정'}>
+                        <ButtonCRUD valueCRUD={"수정"}/>
+                    </Link>
+                    <ButtonCRUD valueCRUD={"삭제"} onClick={handleDelete}/>
+                    <ButtonCRUD valueCRUD={"조회"} onClick={handleRead}/>
                 </Buttons>
             </BelowDiv>
         </ControllerWrapper>

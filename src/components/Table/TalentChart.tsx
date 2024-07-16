@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 
 const TalentChartWrapper = styled.div`
-    width: 80%;
+    width: 90%;
     height: 500px;
 
     margin: 0 auto;
@@ -11,6 +11,8 @@ const TalentChartWrapper = styled.div`
 const Table = styled.table`
     width: 100%;
     border-collapse: collapse;
+
+    font-size: 13px;
 `;
 
 const TableRow = styled.tr<{ backgroundColor?: string; fontColor?: string }>`

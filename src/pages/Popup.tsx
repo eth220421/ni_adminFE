@@ -1,9 +1,8 @@
 import React from "react";
 import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
-import ButtonReset from "../components/Buttons/ButtonReset";
-import ButtonRegister from "../components/Buttons/ButtonRegister";
+import Form from "../components/Form/Form";
 
 const PopupWrapper = styled.div`
   width: 100%;
@@ -23,34 +22,15 @@ const Div = styled.div<{alignment?: string, marginTop?: string}>`
   justify-content: ${(props) => props.alignment || "start"};
 `
 
-const Form = styled.div`
-  background-color: whitesmoke;
-  width: 80%;
-  height: 100%;
-
-  margin: 0 auto;
-`
-
-const Buttons = styled.div`
-  width: 125px;
-
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-`
-
 // NIM_002_1
 function Popup() {
-  const navigate = useNavigate();
-  
-  const handleRegister = () => {
-    alert("register\n등록신청 로직 구현 예정");
-    navigate(-1);
-  }
-  
-  const handleReset = () => {
-    alert("reset\n초기화 로직 구현 예정");
-  }
+  // Controller.tsx로부터 넘겨받는 props를 위한 객체
+  const location = useLocation();
+  const params = new URLSearchParams(location.search);
+
+  // URLSearchParamsdml의 .get()은 파라미터가 없을 경우를 대비해 string || null 형태로 리턴
+  // 그래서 || "" 작성 필요
+  const valueApply = params.get("valueApply") || "";
 
   return (
     <PopupWrapper>
@@ -59,14 +39,8 @@ function Popup() {
           Popup 호출 화면
         </h3>
       </Div>
-      <Form>
-        article
-      </Form>
-      <Div alignment="end" marginTop="20px">
-        <Buttons>
-          <ButtonReset onClick={handleReset}/>
-          <ButtonRegister onClick={handleRegister}/>
-        </Buttons>
+      <Div>
+        <Form valueApply={valueApply} />
       </Div>
     </PopupWrapper>
   );

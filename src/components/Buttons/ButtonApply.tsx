@@ -1,12 +1,8 @@
 import React from 'react'
 import styled from 'styled-components'
 
-const Register = styled.input.attrs({
-    type: 'submit',
-    name: 'Btn_Register',
-    value: '등록신청'
-})`
-    width: fit-content;
+const Apply = styled.button`
+    width: 70px;
     height: 30px;
 
     border: 1px solid rgb(75, 141, 248);
@@ -23,14 +19,17 @@ const Register = styled.input.attrs({
     }
 `
 
-type ButtonRegisterProps = {
-    onClick?: () => void;
+type ButtonApplyProps = {
+    valueApply: string;
+    formId: string;
 }
 
-function ButtonRegister({ onClick }: ButtonRegisterProps) {
+function ButtonApply({ valueApply, formId }: ButtonApplyProps) {
     return (
-        <Register onClick={onClick}/>
+        <Apply type="submit" form={formId}>
+            {valueApply}
+        </Apply>
     );
 }
 
-export default ButtonRegister;
+export default ButtonApply;

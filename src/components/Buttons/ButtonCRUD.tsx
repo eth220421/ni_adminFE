@@ -23,13 +23,13 @@ const CRUD = styled.input.attrs({
 `
 // 넘겨받는 props의 타입 지정
 type ButtonCRUDProps = {
-    str: string;
+    valueCRUD: string;
     onClick?: () => void;
 }
 
-function ButtonCRUD({ str, onClick }: ButtonCRUDProps) {
+function ButtonCRUD({ valueCRUD, onClick }: ButtonCRUDProps) {
     return (
-        <CRUD value={str} onClick={onClick}/>
+        <CRUD value={valueCRUD} onClick={onClick}/>
     );
 }
 
