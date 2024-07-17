@@ -5,9 +5,11 @@ import ButtonZipCode from "../Buttons/ButtonZipCode";
 import ButtonChoose from "../Buttons/ButtonChoose";
 import ButtonReset from "../Buttons/ButtonReset";
 import ButtonApply from "../Buttons/ButtonApply";
-import { TalentInfoProps } from '../../interfaces/TalentInfoProps';
+import { TalentInfoProps } from "../../interfaces/TalentInfoProps";
 import { FaSistrix } from "react-icons/fa6";
 import { useNavigate } from "react-router-dom";
+import { TalentObj } from "../../interfaces/TalentObj";
+import { postTalent } from "../../apis/api/Talent/postTalent";
 
 const TalentInfoWrapper = styled.div`
   width: 100%;
@@ -83,7 +85,7 @@ function TalentInfo({ valueApply }: TalentInfoProps) {
   };
 
   // 등록신청 or 수정 버튼 로직
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     // 폼의 기본 제출 동작 억제
     e.preventDefault();
 
@@ -99,9 +101,37 @@ function TalentInfo({ valueApply }: TalentInfoProps) {
       formValues.bListIsChecked =
         formValues.bListIsChecked === "on" ? "true" : "false";
 
-      // alert창에서 보기 편하게 JSON 형식으로 변환
-      alert(valueApply + " 완료 \n" + JSON.stringify(formValues, null, 2));
-      navigate(-1);
+      const newTalent: TalentObj = {
+        korName: formValues.korName as string,
+        engName: formValues.engName as string,
+        ssnFront: formValues.ssnFront as string,
+        ssnBack: formValues.ssnBack as string,
+        national: formValues.national as string,
+        phoneFront: formValues.phoneFront as string,
+        phoneMiddle: formValues.phoneMiddle as string,
+        phoneBack: formValues.phoneBack as string,
+        birthday: formValues.birthday as string,
+        address: formValues.address as string,
+        email: formValues.email as string,
+        qualification: formValues.qualification as string,
+        acquireDay: formValues.acquireDay as string,
+        company: formValues.company as string,
+        major: formValues.major as string,
+        skill: formValues.skill as string,
+        assessCode: formValues.assessCode as string,
+        assessContent: formValues.assessContent as string,
+        bListIsChecked: formValues.bListIsChecked as unknown as boolean,
+        bListReason: formValues.bListReason as string,
+        profile: formValues.profile as string,
+      };
+
+      try {
+        const response = await postTalent(newTalent);
+        alert(valueApply + " 완료 \n" + JSON.stringify(response, null, 2));
+        navigate(-1);
+      } catch (error) {
+        console.error("인재 신규 등록 오류 : ", error);
+      }
     } else {
       alert("필수 입력 정보를 작성해주세요.");
     }
