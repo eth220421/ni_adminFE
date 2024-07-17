@@ -1,6 +1,8 @@
 import React from "react";
 import styled from "styled-components";
 
+import { ButtonZipCodeProps } from '../../interfaces/ButtonZipCodeProps';
+
 const ZipCode = styled.input.attrs({
     type: 'button',
     value: '우편번호 검색'
@@ -20,11 +22,6 @@ const ZipCode = styled.input.attrs({
         cursor: pointer;
     }
 `
-
-type ButtonZipCodeProps = {
-    onClick: () => void;
-}
-
 function ButtonZipCode({ onClick }: ButtonZipCodeProps) {
     return (
         <ZipCode onClick={onClick}/>

@@ -19,22 +19,13 @@ const ControllerWrapper = styled.div`
     flex-direction: column;
 `
 
-const AboveDiv = styled.div`
+const Div = styled.div<{ alignment?: string }>`
     width: 100%;
     height: 100%;
 
     display: flex;
     align-items: center;
-    justify-content: start;
-`;
-
-const BelowDiv = styled.div`
-    width: 100%;
-    height: 100%;
-
-    display: flex;
-    align-items: center;
-    justify-content: end;
+    justify-content: ${(props) => props.alignment || "center"};
 `;
 
 const InputField = styled.div`
@@ -68,15 +59,15 @@ function Controller() {
     
     return (
         <ControllerWrapper>
-            <AboveDiv>
+            <Div alignment='start'>
                 <InputField>
                     인재명 : &nbsp;<input type='text' name='TalName' />
                 </InputField>
                 <InputField>
                     소속사 : &nbsp;<input type='text' name='agency' />
                 </InputField>
-            </AboveDiv>
-            <BelowDiv>
+            </Div>
+            <Div alignment='end'>
                 <Buttons>
                     <Link to={'./popup?valueApply=등록신청'}>
                         <ButtonCRUD valueCRUD={"신규"}/>
@@ -88,7 +79,7 @@ function Controller() {
                     <ButtonCRUD valueCRUD={"삭제"} onClick={handleDelete}/>
                     <ButtonCRUD valueCRUD={"조회"} onClick={handleRead}/>
                 </Buttons>
-            </BelowDiv>
+            </Div>
         </ControllerWrapper>
     );
 }

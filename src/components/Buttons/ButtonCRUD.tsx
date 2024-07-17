@@ -1,6 +1,8 @@
 import React from 'react'
 import styled from 'styled-components';
 
+import { ButtonCRUDProps } from '../../interfaces/ButtonCRUDProps';
+
 const CRUD = styled.input.attrs({
     type: 'submit',
     name: 'Btn_CRUD'
@@ -21,11 +23,6 @@ const CRUD = styled.input.attrs({
         background-color: whitesmoke;
     }
 `
-// 넘겨받는 props의 타입 지정
-type ButtonCRUDProps = {
-    valueCRUD: string;
-    onClick?: () => void;
-}
 
 function ButtonCRUD({ valueCRUD, onClick }: ButtonCRUDProps) {
     return (

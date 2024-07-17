@@ -1,6 +1,8 @@
 import React from "react";
 import styled from "styled-components";
 
+import { ButtonChooseProps } from '../../interfaces/ButtonChooseProps';
+
 const Choose = styled.input.attrs({
     type: 'button',
     value: '찾아보기'
@@ -19,11 +21,6 @@ const Choose = styled.input.attrs({
         background-color: whitesmoke;
     }
 `
-
-type ButtonChooseProps = {
-    width: string;
-    onClick: () => void;
-}
 
 function ButtonChoose({ width, onClick }: ButtonChooseProps) {
     return (

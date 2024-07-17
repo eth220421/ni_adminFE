@@ -1,6 +1,8 @@
 import React from 'react'
 import styled from 'styled-components'
 
+import { ButtonApplyProps } from '../../interfaces/ButtonApplyProps';
+
 const Apply = styled.button`
     width: 70px;
     height: 30px;
@@ -18,11 +20,6 @@ const Apply = styled.button`
         border: 1px solid rgb(58, 123, 228);
     }
 `
-
-type ButtonApplyProps = {
-    valueApply: string;
-    formId: string;
-}
 
 function ButtonApply({ valueApply, formId }: ButtonApplyProps) {
     return (

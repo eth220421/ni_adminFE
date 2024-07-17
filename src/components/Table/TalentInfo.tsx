@@ -5,6 +5,7 @@ import ButtonZipCode from "../Buttons/ButtonZipCode";
 import ButtonChoose from "../Buttons/ButtonChoose";
 import ButtonReset from "../Buttons/ButtonReset";
 import ButtonApply from "../Buttons/ButtonApply";
+import { TalentInfoProps } from '../../interfaces/TalentInfoProps';
 import { FaSistrix } from "react-icons/fa6";
 import { useNavigate } from "react-router-dom";
 
@@ -36,7 +37,13 @@ const Input = styled.input.attrs((props) => ({
   type: props.type || "text",
   name: props.name || undefined,
   required: props.required || false,
-}))<{ type?: string; name?: string; width?: string; required?: boolean, alignment?: string }>`
+}))<{
+  type?: string;
+  name?: string;
+  width?: string;
+  required?: boolean;
+  alignment?: string;
+}>`
   width: ${(props) => props.width || "fit-content"};
   text-align: ${(props) => props.alignment || "left"};
 `;
@@ -59,10 +66,6 @@ const StyledFaSistrix = styled(FaSistrix)`
     cursor: pointer;
   }
 `;
-
-type TalentInfoProps = {
-  valueApply: string;
-};
 
 function TalentInfo({ valueApply }: TalentInfoProps) {
   // 화면 전환을 위한 객체
@@ -93,16 +96,12 @@ function TalentInfo({ valueApply }: TalentInfoProps) {
       const formData = new FormData(form);
       // {key: value} 형식을 [key, value] 배열 형식으로 변환 후 객체로 변환
       const formValues = Object.fromEntries(formData.entries());
-      // alert창에서 보기 편하게 JSON 형식으로 변환
-      alert(JSON.stringify(formValues, null, 2));
+      formValues.bListIsChecked =
+        formValues.bListIsChecked === "on" ? "true" : "false";
 
-      if (valueApply === "등록신청") {
-        alert(valueApply + " 완료");
-        navigate(-1);
-      } else if (valueApply === "수정") {
-        alert(valueApply + " 완료");
-        navigate(-1);
-      }
+      // alert창에서 보기 편하게 JSON 형식으로 변환
+      alert(valueApply + " 완료 \n" + JSON.stringify(formValues, null, 2));
+      navigate(-1);
     } else {
       alert("필수 입력 정보를 작성해주세요.");
     }
@@ -153,12 +152,8 @@ function TalentInfo({ valueApply }: TalentInfoProps) {
             </TableCell>
           </TableRow>
           <TableRow>
-            <TableCell>
-              *
-            </TableCell>
-            <TableCell>
-              전화번호
-            </TableCell>
+            <TableCell>*</TableCell>
+            <TableCell>전화번호</TableCell>
             <TableCell alignment="left">
               <select name="phoneFront">
                 <option value={"010"}>010</option>
@@ -167,15 +162,28 @@ function TalentInfo({ valueApply }: TalentInfoProps) {
                 <option value={"017"}>017</option>
               </select>
               <span style={{ marginInline: "5px" }}>-</span>
-              <Input type="password" name="phoneMiddle" width="25%" required={true} />
+              <Input
+                type="password"
+                name="phoneMiddle"
+                width="25%"
+                required={true}
+              />
               <span style={{ marginInline: "5px" }}>-</span>
-              <Input type="password" name="phoneBack" width="25%" required={true} />
+              <Input
+                type="password"
+                name="phoneBack"
+                width="25%"
+                required={true}
+              />
             </TableCell>
+            <TableCell>생년월일</TableCell>
             <TableCell>
-              생년월일
-            </TableCell>
-            <TableCell>
-              <Input type="date" width="100%" name="birthday" alignment="center" />
+              <Input
+                type="date"
+                width="100%"
+                name="birthday"
+                alignment="center"
+              />
             </TableCell>
           </TableRow>
           <TableRow>
@@ -203,7 +211,12 @@ function TalentInfo({ valueApply }: TalentInfoProps) {
             </TableCell>
             <TableCell>기사취득년월</TableCell>
             <TableCell>
-              <Input type="date" width="100%" name="acquireDay" alignment="center" />
+              <Input
+                type="date"
+                width="100%"
+                name="acquireDay"
+                alignment="center"
+              />
             </TableCell>
           </TableRow>
           <TableRow>

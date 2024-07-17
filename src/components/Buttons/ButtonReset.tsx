@@ -1,6 +1,8 @@
 import React from 'react'
 import styled from 'styled-components'
 
+import { ButtonResetProps } from '../../interfaces/ButtonResetProps';
+
 const Reset = styled.input.attrs({
     type: 'button',
     name: 'Btn_Reset',
@@ -20,10 +22,6 @@ const Reset = styled.input.attrs({
         background-color: #e2e2e2;
     }
 `
-
-type ButtonResetProps = {
-    onClick?: () => void;
-}
 
 function ButtonReset({ onClick }: ButtonResetProps) {
     return (
