@@ -9,7 +9,8 @@ import { TalentInfoProps } from "../../interfaces/TalentInfoProps";
 import { FaSistrix } from "react-icons/fa6";
 import { useNavigate } from "react-router-dom";
 import { TalentObj } from "../../interfaces/TalentObj";
-import { postTalent } from "../../apis/api/Talent/postTalent";
+import { getAllTalent } from "../apis/api/getAllTalent";
+import axios from "axios";
 
 const TalentInfoWrapper = styled.div`
   width: 100%;
@@ -84,65 +85,62 @@ function TalentInfo({ valueApply }: TalentInfoProps) {
     }
   };
 
-  // 등록신청 or 수정 버튼 로직
-  const handleSubmit = async (e: React.FormEvent) => {
-    // 폼의 기본 제출 동작 억제
-    e.preventDefault();
-
-    // e.target을 HTMLFormElement 타입으로 변환 후 저장
-    const form = e.target as HTMLFormElement;
-
-    // required 속성을 가진 모든 폼이 작성되었는지 유효성 검사
-    if (form.checkValidity()) {
-      // {key: value} 형식으로 저장하기 위해 FormData 객체로 생성
-      const formData = new FormData(form);
-      // {key: value} 형식을 [key, value] 배열 형식으로 변환 후 객체로 변환
-      const formValues = Object.fromEntries(formData.entries());
-      formValues.bListIsChecked =
-        formValues.bListIsChecked === "on" ? "true" : "false";
-
-      const newTalent: TalentObj = {
-        korName: formValues.korName as string,
-        engName: formValues.engName as string,
-        ssnFront: formValues.ssnFront as string,
-        ssnBack: formValues.ssnBack as string,
-        national: formValues.national as string,
-        phoneFront: formValues.phoneFront as string,
-        phoneMiddle: formValues.phoneMiddle as string,
-        phoneBack: formValues.phoneBack as string,
-        birthday: formValues.birthday as string,
-        address: formValues.address as string,
-        email: formValues.email as string,
-        qualification: formValues.qualification as string,
-        acquireDay: formValues.acquireDay as string,
-        company: formValues.company as string,
-        major: formValues.major as string,
-        skill: formValues.skill as string,
-        assessCode: formValues.assessCode as string,
-        assessContent: formValues.assessContent as string,
-        bListIsChecked: formValues.bListIsChecked as unknown as boolean,
-        bListReason: formValues.bListReason as string,
-        profile: formValues.profile as string,
-      };
-
-      try {
-        const response = await postTalent(newTalent);
-        alert(valueApply + " 완료 \n" + JSON.stringify(response, null, 2));
-        navigate(-1);
-      } catch (error) {
-        console.error("인재 신규 등록 오류 : ", error);
-      }
-    } else {
-      alert("필수 입력 정보를 작성해주세요.");
-    }
-  };
-
+  // 우편번호 검색 버튼 클릭 시
   const handleZipCode = () => {
     alert("우편번호 검색 클릭");
   };
 
+  // 찾아보기 버튼 클릭 시
   const handleChoose = () => {
     alert("찾아보기 클릭");
+  };
+
+  // 등록신청 or 수정 버튼 로직
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    try {
+      const form = e.target as HTMLFormElement;
+
+      if (form.checkValidity()) {
+        const formData = new FormData(form);
+        const formValues = Object.fromEntries(formData.entries());
+
+        const requestData = {
+          koreanName: formValues.korName as string,
+          englishName: formValues.engName as string,
+          residentNumberFront: formValues.ssnFront as string,
+          residentNumberBack: formValues.ssnBack as string,
+          nationality: formValues.national as string,
+          phoneNumberFront: formValues.phoneFront as string,
+          phoneNumberMiddle: formValues.phoneMiddle as string,
+          phoneNumberBack: formValues.phoneBack as string,
+          birthDate: formValues.birthday as string,
+          address: formValues.address as string,
+          email: formValues.email as string,
+          qualificationType: formValues.qualification as string,
+          qualificationCode: formValues.acquireDay as string,
+          company: formValues.company as string,
+          major: formValues.major as string,
+          additionalSkills: formValues.skill as string,
+          evaluationCode: formValues.assessCode as string,
+          evaluationContent: formValues.assessContent as string,
+          isBlacklisted: formValues.bListIsChecked === "on" ? "O" : "X",
+          blacklistReason: formValues.bListReason as string,
+          profile: formValues.profile as string,
+        };
+
+        const response = await axios.post("http://localhost:8080/manpower", requestData);
+        if (response.status === 200) {
+          alert("성공적으로 제출되었습니다.");
+          navigate("/some-path"); // 성공 시 다른 페이지로 이동할 경우 설정
+        } else {
+          alert("제출에 실패했습니다.");
+        }
+      }
+    } catch (error) {
+      alert("오류가 발생했습니다: " + error);
+    }
   };
 
   return (

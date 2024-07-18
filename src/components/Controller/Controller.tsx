@@ -1,8 +1,10 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 
 import ButtonCRUD from '../Buttons/ButtonCRUD'
 import { Link } from 'react-router-dom';
+import { getAllTalent } from '../apis/api/getAllTalent';
+import { getTalent } from '../apis/api/getTalent';
 
 const ControllerWrapper = styled.div`
     width: 90%;
@@ -49,11 +51,21 @@ const Buttons = styled.div`
 `
 
 function Controller() {
-    const handleRead = () => {
-        alert("조회 버튼 클릭");
-    }
+    const [talName, setTalName] = useState('');
+
+    const handleRead = async () => {
+        if (talName.trim() === '') {
+            // GET All Talent
+            const response = await getAllTalent();
+            console.log(response);
+        } else {
+            // GET Talent By ID
+            const response = await getTalent({ talName });
+            console.log(response);
+        }
+    };
     
-    const handleDelete = () => {
+    const handleDelete = async () => {
         alert("삭제 버튼 클릭");
     }
     
@@ -61,7 +73,7 @@ function Controller() {
         <ControllerWrapper>
             <Div alignment='start'>
                 <InputField>
-                    인재명 : &nbsp;<input type='text' name='TalName' />
+                    인재명 : &nbsp;<input type='text' name='TalName' value={talName} onChange={(e) => setTalName(e.target.value)} />
                 </InputField>
                 <InputField>
                     소속사 : &nbsp;<input type='text' name='agency' />
