@@ -59,7 +59,7 @@ function Controller() {
             // GET All Talent
             getAllTalent();
         } else {
-            // GET Talent By ID
+            // GET Talent By Name
             getTalent({ talName });
         }
     };
@@ -69,6 +69,7 @@ function Controller() {
             alert('삭제할 인재를 선택해주세요.');
         }
         else {
+            // DELETE Talent By Name
             deleteTalent({ talName });
         }
     }
