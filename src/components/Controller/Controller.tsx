@@ -5,6 +5,7 @@ import ButtonCRUD from '../Buttons/ButtonCRUD'
 import { Link } from 'react-router-dom';
 import { getAllTalent } from '../apis/api/getAllTalent';
 import { getTalent } from '../apis/api/getTalent';
+import { deleteTalent } from '../apis/api/deleteTalent';
 
 const ControllerWrapper = styled.div`
     width: 90%;
@@ -56,17 +57,20 @@ function Controller() {
     const handleRead = async () => {
         if (talName.trim() === '') {
             // GET All Talent
-            const response = await getAllTalent();
-            console.log(response);
+            getAllTalent();
         } else {
             // GET Talent By ID
-            const response = await getTalent({ talName });
-            console.log(response);
+            getTalent({ talName });
         }
     };
     
     const handleDelete = async () => {
-        alert("삭제 버튼 클릭");
+        if (talName.trim() === '') {
+            alert('삭제할 인재를 선택해주세요.');
+        }
+        else {
+            deleteTalent({ talName });
+        }
     }
     
     return (
