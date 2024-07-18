@@ -187,14 +187,14 @@ function TalentInfo({ valueApply }: TalentInfoProps) {
                 </select>
                 <span style={{ marginInline: "5px" }}>-</span>
                 <Input
-                  type="password"
+                  type="text"
                   name="phoneMiddle"
                   width="25%"
                   required={true}
                 />
                 <span style={{ marginInline: "5px" }}>-</span>
                 <Input
-                  type="password"
+                  type="text"
                   name="phoneBack"
                   width="25%"
                   required={true}

@@ -1,5 +1,6 @@
 export interface TalentObj {
   // 물음표 안 붙은 properties는 필수 입력 정보
+  id?: number;
   koreanName: string;  // 이름 (*)
   englishName?: string;  // 영문 이름
   residentNumberFront?: string;  // 주민번호 앞 6자리

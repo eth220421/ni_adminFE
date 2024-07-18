@@ -3,9 +3,12 @@ import styled from 'styled-components'
 
 import ButtonCRUD from '../Buttons/ButtonCRUD'
 import { Link } from 'react-router-dom';
-import { getAllTalent } from '../apis/api/getAllTalent';
 import { getTalent } from '../apis/api/getTalent';
 import { deleteTalent } from '../apis/api/deleteTalent';
+import { mapAllTalent } from '../apis/services/mapAllTalent';
+import { mapTalent } from '../apis/services/mapTalent';
+import { ControllerProps } from '../../interfaces/ControllerProps';
+import { TalentObj } from '../../interfaces/TalentObj';
 
 const ControllerWrapper = styled.div`
     width: 90%;
@@ -51,19 +54,23 @@ const Buttons = styled.div`
     justify-content: space-around;
 `
 
-function Controller() {
+function Controller({ setTalents }: ControllerProps) {
     const [talName, setTalName] = useState('');
 
+    // 조회 버튼 클릭 시
     const handleRead = async () => {
         if (talName.trim() === '') {
             // GET All Talent
-            getAllTalent();
+            const dataList: TalentObj[] = await mapAllTalent();
+            setTalents(dataList);
         } else {
             // GET Talent By Name
-            getTalent({ talName });
+            const data: TalentObj[] = await mapTalent({ talName });
+            setTalents(data);
         }
     };
     
+    // 삭제 버튼 클릭 시
     const handleDelete = async () => {
         if (talName.trim() === '') {
             alert('삭제할 인재를 선택해주세요.');
@@ -75,6 +82,7 @@ function Controller() {
     }
     
     return (
+        <div>
         <ControllerWrapper>
             <Div alignment='start'>
                 <InputField>
@@ -98,6 +106,7 @@ function Controller() {
                 </Buttons>
             </Div>
         </ControllerWrapper>
+        </div>
     );
 }
 

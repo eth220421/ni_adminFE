@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 
 import Controller from "../components/Controller/Controller";
 import TalentChart from "../components/Table/TalentChart";
+import { TalentObj } from "../interfaces/TalentObj";
 
 const TalentPageWrapper = styled.div`
   width: 100%;
@@ -18,13 +19,15 @@ const Div = styled.div`
 
 // NIM_002
 function TalentPage() {
+  const [talents, setTalents] = useState<TalentObj[]>([]);
+  
   return (
     <TalentPageWrapper>
       <Div>
-        <Controller />
+        <Controller setTalents={setTalents}/>
       </Div>
       <Div>
-        <TalentChart />
+        <TalentChart talents={talents}/>
       </Div>
     </TalentPageWrapper>
   );
