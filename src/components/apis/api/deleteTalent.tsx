@@ -4,7 +4,7 @@ import { TalentObj } from '../../../interfaces/TalentObj';
 
 export async function deleteTalent({ talName }: DeleteTalentProps) {
     try {
-        const response = await axios.delete<TalentObj>(`/${talName}`);
+        const response = await axios.delete<TalentObj>(`/name/${talName}`);
         console.log(response.data);
     }
     catch (error) {

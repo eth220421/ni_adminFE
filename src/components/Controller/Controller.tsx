@@ -5,7 +5,10 @@ import ButtonCRUD from '../Buttons/ButtonCRUD'
 import { Link } from 'react-router-dom';
 import { getAllTalent } from '../apis/api/getAllTalent';
 import { getTalent } from '../apis/api/getTalent';
+import { getTalentByCompany } from '../apis/api/getTalentByCompany';
+import { getTalentByKoreanNameAndCompany } from '../apis/api/getTalentByKoreanNameAndCompany';
 import { deleteTalent } from '../apis/api/deleteTalent';
+
 
 const ControllerWrapper = styled.div`
     width: 90%;
@@ -53,26 +56,37 @@ const Buttons = styled.div`
 
 function Controller() {
     const [talName, setTalName] = useState('');
+    const [company, setCompany] = useState('');
 
     const handleRead = async () => {
-        if (talName.trim() === '') {
+        if (talName.trim() === '' && company.trim() === '') {
             // GET All Talent
-            getAllTalent();
-        } else {
+            const response = await getAllTalent();
+            console.log(response);
+        } else if (talName.trim() !== '' && company.trim() === '') {
             // GET Talent By Name
-            getTalent({ talName });
+            const response = await getTalent({ talName });
+            console.log(response);
+        } else if (company.trim() !== '' && talName.trim() === '') {
+            // GET Talent By Company
+            const response = await getTalentByCompany({ company });
+            console.log(response);
+        }else if (talName.trim() !== '' && company.trim() !== '') {
+            // GET Talent By Name and Company
+            const response = await getTalentByKoreanNameAndCompany({ talName, company });
+            console.log(response);
         }
     };
     
     const handleDelete = async () => {
         if (talName.trim() === '') {
-            alert('삭제할 인재를 선택해주세요.');
-        }
-        else {
+            alert('삭제할 인재명을 입력해주세요.');
+        } else {
             // DELETE Talent By Name
-            deleteTalent({ talName });
+            await deleteTalent({ talName });
+            alert('삭제 완료');
         }
-    }
+    };
     
     return (
         <ControllerWrapper>
@@ -81,7 +95,7 @@ function Controller() {
                     인재명 : &nbsp;<input type='text' name='TalName' value={talName} onChange={(e) => setTalName(e.target.value)} />
                 </InputField>
                 <InputField>
-                    소속사 : &nbsp;<input type='text' name='agency' />
+                    소속사 : &nbsp;<input type='text' name='company' value={company} onChange={(e) => setCompany(e.target.value)}/>
                 </InputField>
             </Div>
             <Div alignment='end'>
