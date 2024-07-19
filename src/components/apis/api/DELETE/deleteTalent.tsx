@@ -1,6 +1,6 @@
-import { axios } from '../utils/axios';
-import { DeleteTalentProps } from '../../../interfaces/DeleteTalentProps';
-import { TalentObj } from '../../../interfaces/TalentObj';
+import { axios } from '../../utils/axios';
+import { DeleteTalentProps } from '../../../../interfaces/DeleteTalentProps';
+import { TalentObj } from '../../../../interfaces/TalentObj';
 
 export async function deleteTalent({ talName }: DeleteTalentProps) {
     try {

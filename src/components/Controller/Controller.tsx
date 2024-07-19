@@ -3,12 +3,13 @@ import styled from 'styled-components'
 
 import ButtonCRUD from '../Buttons/ButtonCRUD'
 import { Link } from 'react-router-dom';
-import { getTalent } from '../apis/api/getTalent';
-import { deleteTalent } from '../apis/api/deleteTalent';
+import { deleteTalent } from '../apis/api/DELETE/deleteTalent';
 import { mapAllTalent } from '../apis/services/mapAllTalent';
-import { mapTalent } from '../apis/services/mapTalent';
+import { mapTalentByName } from '../apis/services/mapTalentByName';
+import { mapTalentByCompany } from '../apis/services/mapTalentByCompany';
 import { ControllerProps } from '../../interfaces/ControllerProps';
 import { TalentObj } from '../../interfaces/TalentObj';
+import { mapTalentByNameAndCompany } from '../apis/services/mapTalentByNameAndCompany';
 
 const ControllerWrapper = styled.div`
     width: 90%;
@@ -56,16 +57,25 @@ const Buttons = styled.div`
 
 function Controller({ setTalents }: ControllerProps) {
     const [talName, setTalName] = useState('');
+    const [comName, setComName] = useState('');
 
     // 조회 버튼 클릭 시
     const handleRead = async () => {
-        if (talName.trim() === '') {
+        if (talName.trim() === '' && comName.trim() === '') {
             // GET All Talent
             const dataList: TalentObj[] = await mapAllTalent();
             setTalents(dataList);
-        } else {
+        } else if (talName.trim() !== '' && comName.trim() === '') {
             // GET Talent By Name
-            const data: TalentObj[] = await mapTalent({ talName });
+            const data: TalentObj[] = await mapTalentByName({ talName });
+            setTalents(data);
+        } else if (talName.trim() === '' && comName.trim() !== '') {
+            // GET Talent By Company
+            const data: TalentObj[] = await mapTalentByCompany({ comName });
+            setTalents(data);
+        } else if (talName.trim() !== '' && comName.trim() !== '') {
+            // GET Talent By Name and Company
+            const data: TalentObj[] = await mapTalentByNameAndCompany({ talName, comName });
             setTalents(data);
         }
     };
@@ -89,7 +99,7 @@ function Controller({ setTalents }: ControllerProps) {
                     인재명 : &nbsp;<input type='text' name='TalName' value={talName} onChange={(e) => setTalName(e.target.value)} />
                 </InputField>
                 <InputField>
-                    소속사 : &nbsp;<input type='text' name='agency' />
+                    소속사 : &nbsp;<input type='text' name='agency' value={comName} onChange={(e) => setComName(e.target.value)} />
                 </InputField>
             </Div>
             <Div alignment='end'>

@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
-import { TalentObj } from '../../interfaces/TalentObj';
+import { TalentChartProps } from '../../interfaces/TalentChartProps';
+import { calAge } from '../../hooks/calculates/calAge';
 
 const TalentChartWrapper = styled.div`
     width: 90%;
@@ -33,29 +34,6 @@ const TableCell = styled.td`
     border: 1px solid black;
 `
 
-interface TalentChartProps {
-    talents: TalentObj[];
-}
-
-// 만 나이 계산 함수
-const calculateAge = (birthDate?: string): number => {
-    if (!birthDate) {
-        return 0;
-    }
-
-    const today = new Date();
-    const birthDateObj = new Date(birthDate);
-    let age = today.getFullYear() - birthDateObj.getFullYear();
-    const monthDifference = today.getMonth() - birthDateObj.getMonth();
-    if (
-        monthDifference < 0 ||
-        (monthDifference === 0 && today.getDate() < birthDateObj.getDate())
-    ) {
-        age--;
-    }
-    return age;
-};
-
 const TalentChart: React.FC<TalentChartProps> = ({ talents }) => {
     return (
         <TalentChartWrapper>
@@ -87,7 +65,7 @@ const TalentChart: React.FC<TalentChartProps> = ({ talents }) => {
                             <TableCell>{`${talent.phoneNumberFront}-${talent.phoneNumberMiddle}-${talent.phoneNumberBack}`}</TableCell>
                             <TableCell>{talent.address}</TableCell>
                             <TableCell>{talent.email}</TableCell>
-                            <TableCell>{calculateAge(talent.birthDate)}</TableCell>
+                            <TableCell>{calAge(talent.birthDate)}</TableCell>
                             <TableCell>{talent.qualificationType}</TableCell>
                             <TableCell>{talent.qualificationCode}</TableCell>
                             <TableCell>{talent.major}</TableCell>
