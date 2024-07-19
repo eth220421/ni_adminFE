@@ -1,6 +1,6 @@
 import { axios } from '../../utils/axios';
-import { CreateTalentProps } from '../../../../interfaces/CreateTalentProps';
-import { TalentObj } from '../../../../interfaces/TalentObj';
+import { CreateTalentProps } from '../../../interfaces/CreateTalentProps';
+import { TalentObj } from '../../../interfaces/TalentObj';
 
 export async function createTalent({ newTalent, navigate }: CreateTalentProps) {
     try {

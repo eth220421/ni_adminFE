@@ -9,7 +9,7 @@ import { TalentInfoProps } from "../../interfaces/TalentInfoProps";
 import { FaSistrix } from "react-icons/fa6";
 import { useNavigate } from "react-router-dom";
 import { TalentObj } from "../../interfaces/TalentObj";
-import { createTalent } from "../apis/api/CREATE/createTalent";
+import { createTalent } from "../../apis/api/CREATE/createTalent";
 
 const TalentInfoWrapper = styled.div`
   width: 100%;

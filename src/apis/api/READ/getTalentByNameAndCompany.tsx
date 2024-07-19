@@ -1,6 +1,6 @@
 import { axios } from '../../utils/axios';
-import { TalentObj } from '../../../../interfaces/TalentObj';
-import { GetTalentByNameAndCompanyProps } from '../../../../interfaces/GetTalentByNameAndCompany';
+import { TalentObj } from '../../../interfaces/TalentObj';
+import { GetTalentByNameAndCompanyProps } from '../../../interfaces/GetTalentByNameAndCompany';
 
 export async function getTalentByNameAndCompany({ talName, comName }: GetTalentByNameAndCompanyProps): Promise<TalentObj[] | undefined> {
     try {

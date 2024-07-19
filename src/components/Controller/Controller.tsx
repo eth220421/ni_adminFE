@@ -3,13 +3,13 @@ import styled from 'styled-components'
 
 import ButtonCRUD from '../Buttons/ButtonCRUD'
 import { Link } from 'react-router-dom';
-import { deleteTalent } from '../apis/api/DELETE/deleteTalent';
-import { mapAllTalent } from '../apis/services/mapAllTalent';
-import { mapTalentByName } from '../apis/services/mapTalentByName';
-import { mapTalentByCompany } from '../apis/services/mapTalentByCompany';
+import { deleteTalent } from '../../apis/api/DELETE/deleteTalent';
+import { mapAllTalent } from '../../apis/services/mapAllTalent';
+import { mapTalentByName } from '../../apis/services/mapTalentByName';
+import { mapTalentByCompany } from '../../apis/services/mapTalentByCompany';
 import { ControllerProps } from '../../interfaces/ControllerProps';
 import { TalentObj } from '../../interfaces/TalentObj';
-import { mapTalentByNameAndCompany } from '../apis/services/mapTalentByNameAndCompany';
+import { mapTalentByNameAndCompany } from '../../apis/services/mapTalentByNameAndCompany';
 
 const ControllerWrapper = styled.div`
     width: 90%;
