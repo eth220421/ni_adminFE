@@ -20,14 +20,15 @@ const Div = styled.div`
 // NIM_002
 function TalentPage() {
   const [talents, setTalents] = useState<TalentObj[]>([]);
+  const [checkTalent, setCheckTalent] = useState<TalentObj | null>(null);
   
   return (
     <TalentPageWrapper>
       <Div>
-        <Controller setTalents={setTalents}/>
+        <Controller setTalents={setTalents} checkTalent={checkTalent}/>
       </Div>
       <Div>
-        <TalentChart talents={talents}/>
+        <TalentChart talents={talents} setCheckTalent={setCheckTalent}/>
       </Div>
     </TalentPageWrapper>
   );

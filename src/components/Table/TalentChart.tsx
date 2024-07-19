@@ -2,6 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import { TalentChartProps } from '../../interfaces/TalentChartProps';
 import { calAge } from '../../hooks/calculates/calAge';
+import { TalentObj } from '../../interfaces/TalentObj';
 
 const TalentChartWrapper = styled.div`
     width: 90%;
@@ -34,12 +35,17 @@ const TableCell = styled.td`
     border: 1px solid black;
 `
 
-const TalentChart: React.FC<TalentChartProps> = ({ talents }) => {
+const TalentChart: React.FC<TalentChartProps> = ({ talents, setCheckTalent }) => {
+    // 체크된 인재의 데이터 렌더링
+    const handleCheck = (talent: TalentObj) => {
+        setCheckTalent(talent);
+    }
+
     return (
         <TalentChartWrapper>
             <Table>
                 <TableRow backgroundColor='rgb(48, 84, 150)' fontColor='white' fontSize='13px'>
-                    <TableCell>▣</TableCell>
+                    <TableCell>▼</TableCell>
                     <TableCell>ID</TableCell>
                     <TableCell>성명</TableCell>
                     <TableCell>선택</TableCell>
@@ -57,7 +63,13 @@ const TalentChart: React.FC<TalentChartProps> = ({ talents }) => {
                 </TableRow>
                 {talents.map((talent, index) => (
                         <TableRow key={index}>
-                            <TableCell><input type='checkbox' /></TableCell>
+                            <TableCell>
+                                <input
+                                    type='radio'
+                                    name='talent'
+                                    onChange={() => handleCheck(talent)}
+                                />
+                            </TableCell>
                             <TableCell>{talent.id}</TableCell>
                             <TableCell>{talent.koreanName}</TableCell>
                             <TableCell></TableCell>

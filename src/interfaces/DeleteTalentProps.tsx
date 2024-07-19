@@ -1,3 +1,3 @@
 export interface DeleteTalentProps {
-    talName: string;
+    talId?: number;
 }
