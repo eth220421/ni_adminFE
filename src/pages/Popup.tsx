@@ -23,24 +23,22 @@ const Div = styled.div<{ alignment?: string; marginTop?: string }>`
 `;
 
 function Popup() {
-  // Controller.tsx로부터 넘겨받는 props를 위한 객체
   const location = useLocation();
-  const params = new URLSearchParams(location.search);
 
-  // URLSearchParams의 .get()은 파라미터가 없을 경우를 대비해 string || null 형태로 리턴
-  // 그래서 || "" 작성 필요
-  const valueApply = params.get('valueApply') || '';
-  const talent = location.state?.talent as TalentObj;
+  // Controller.tsx로부터 넘어오는 state 객체 할당
+  const title = location.state.title as string;
+  const valueApply = location.state.valueApply as string;
+  const checkTalent = location.state.checkTalent as TalentObj;
 
-  console.log('수정할 인재 : ', talent);
+  console.log(checkTalent);
 
   return (
     <PopupWrapper>
       <Div alignment="center">
-        <h3>Popup 호출 화면</h3>
+        <h3>인재 정보 {title}</h3>
       </Div>
       <Div>
-        <Form valueApply={valueApply} />
+        <Form valueApply={valueApply} checkTalent={checkTalent}/>
       </Div>
     </PopupWrapper>
   );

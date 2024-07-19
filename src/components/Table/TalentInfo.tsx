@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 
 import ButtonZipCode from "../Buttons/ButtonZipCode";
@@ -10,6 +10,7 @@ import { FaSistrix } from "react-icons/fa6";
 import { useNavigate } from "react-router-dom";
 import { TalentObj } from "../../interfaces/TalentObj";
 import { createTalent } from "../../apis/api/CREATE/createTalent";
+import { updateTalent } from "../../apis/api/UPDATE/updateTalent";
 
 const TalentInfoWrapper = styled.div`
   width: 100%;
@@ -69,18 +70,94 @@ const StyledFaSistrix = styled(FaSistrix)`
   }
 `;
 
-function TalentInfo({ valueApply }: TalentInfoProps) {
+function TalentInfo({ valueApply, checkTalent }: TalentInfoProps) {
   // 화면 전환을 위한 객체
   const navigate = useNavigate();
 
   // form 초기화를 위한 useRef 추가
   const formRef = useRef<HTMLFormElement | null>(null);
 
+  // 상태를 객체 형태로 관리
+  const [formData, setFormData] = useState({
+    koreanName: '',
+    englishName: '',
+    residentNumberFront: '',
+    residentNumberBack: '',
+    nationality: '',
+    phoneNumberFront: '',
+    phoneNumberMiddle: '',
+    phoneNumberBack: '',
+    birthDate: '',
+    address: '',
+    email: '',
+    qualificationType: '',
+    qualificationCode: '',
+    company: '',
+    major: '',
+    additionalSkills: '',
+    evaluationCode: '',
+    evaluationContent: '',
+    isBlacklisted: false,
+    blacklistReason: '',
+    profile: '',
+  });
+
+  // 인재 정보 rendering
+  useEffect(() => {
+    if (checkTalent) {
+      setFormData({
+        koreanName: checkTalent.koreanName,
+        englishName: checkTalent.englishName || '',
+        residentNumberFront: checkTalent.residentNumberFront || '',
+        residentNumberBack: checkTalent.residentNumberBack || '',
+        nationality: checkTalent.nationality || '',
+        phoneNumberFront: checkTalent.phoneNumberFront || '',
+        phoneNumberMiddle: checkTalent.phoneNumberMiddle || '',
+        phoneNumberBack: checkTalent.phoneNumberBack || '',
+        birthDate: checkTalent.birthDate || '',
+        address: checkTalent.address,
+        email: checkTalent.email,
+        qualificationType: checkTalent.qualificationType,
+        qualificationCode: checkTalent.qualificationCode || '',
+        company: checkTalent.company,
+        major: checkTalent.major || '',
+        additionalSkills: checkTalent.additionalSkills || '',
+        evaluationCode: checkTalent.evaluationCode,
+        evaluationContent: checkTalent.evaluationContent || '',
+        isBlacklisted: checkTalent.isBlacklisted === 'O',
+        blacklistReason: checkTalent.blacklistReason || '',
+        profile: checkTalent.profile || '',
+      });
+    }
+  }, [valueApply, checkTalent]);
+
   // 초기화 버튼 로직
   const handleReset = () => {
-    // 현재 formRef 중 값이 있는게 있다면
     if (formRef.current) {
       formRef.current.reset();
+      setFormData({
+        koreanName: '',
+        englishName: '',
+        residentNumberFront: '',
+        residentNumberBack: '',
+        nationality: '',
+        phoneNumberFront: '',
+        phoneNumberMiddle: '',
+        phoneNumberBack: '',
+        birthDate: '',
+        address: '',
+        email: '',
+        qualificationType: '',
+        qualificationCode: '',
+        company: '',
+        major: '',
+        additionalSkills: '',
+        evaluationCode: '',
+        evaluationContent: '',
+        isBlacklisted: false,
+        blacklistReason: '',
+        profile: '',
+      });
     }
   };
 
@@ -96,45 +173,29 @@ function TalentInfo({ valueApply }: TalentInfoProps) {
 
   // 등록신청 or 수정 버튼 클릭 시
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault(); // 기본 폼 제출 동작을 막음
-
-    const form = e.target as HTMLFormElement;
-
-    // 모든 필수 입력 필드가 입력되어있을 시
-    if(form.checkValidity()) {
-      // 입력한 값들을 배열 형태로 변환
-      const formData = new FormData(form);
-      const formValues = Object.fromEntries(formData.entries());
-      formValues.bListIsChecked = formValues.bListIsChecked === "on" ? "O" : "X"; // 블랙리스트 체크 유무 string으롭 변환
-
-      // 입력 필드에 입력한 값들 TalentObj 객체에 저장
-      const newTalent: TalentObj = {
-        koreanName: formValues.korName as string,
-        englishName: formValues.engName as string,
-        residentNumberFront: formValues.ssnFront as string,
-        residentNumberBack: formValues.ssnBack as string,
-        nationality: formValues.national as string,
-        phoneNumberFront: formValues.phoneFront as string,
-        phoneNumberMiddle: formValues.phoneMiddle as string,
-        phoneNumberBack: formValues.phoneBack as string,
-        birthDate: formValues.birthday as string,
-        address: formValues.address as string,
-        email: formValues.email as string,
-        qualificationType: formValues.qualification as string,
-        qualificationCode: formValues.acquireDay as string,
-        company: formValues.company as string,
-        major: formValues.major as string,
-        additionalSkills: formValues.skill as string,
-        evaluationCode: formValues.assessCode as string,
-        evaluationContent: formValues.assessContent as string,
-        isBlacklisted: formValues.bListIsChecked as string,
-        blacklistReason: formValues.bListReason as string,
-        profile: formValues.profile as string,
+    e.preventDefault();
+    if (formRef.current && formRef.current.checkValidity()) {
+      const ourTalent: TalentObj = {
+        ...formData,
+        isBlacklisted: formData.isBlacklisted ? 'O' : 'X',
       };
 
-      // POST New Talent
-      createTalent({newTalent, navigate});
+      if (checkTalent) {
+        // PUT Talent
+        updateTalent({
+          ourTalent: ourTalent,
+          ourTalentId: checkTalent.id || 0,
+          navigate,
+        });
+      } else {
+        // POST New Talent
+        createTalent({ newTalent: ourTalent, navigate });
+      }
     }
+  };
+
+  const updateField = (field: string, value: any) => {
+    setFormData(prevState => ({ ...prevState, [field]: value }));
   };
 
   return (
@@ -154,31 +215,66 @@ function TalentInfo({ valueApply }: TalentInfoProps) {
               <TableCell width="1%">*</TableCell>
               <TableCell width="15%">성명</TableCell>
               <TableCell width="35%" alignment="left">
-                <Input type="text" name="korName" width="80%" required={true} />
+                <Input
+                  type="text"
+                  name="korName"
+                  width="80%"
+                  required={true}
+                  value={formData.koreanName}
+                  onChange={(e) => updateField('koreanName', e.target.value)}
+                />
               </TableCell>
               <TableCell width="24%">영문명</TableCell>
               <TableCell width="35%" alignment="left">
-                <Input type="text" name="engName" width="100%" />
+                <Input
+                  type="text"
+                  name="engName"
+                  width="100%"
+                  value={formData.englishName}
+                  onChange={(e) => updateField('englishName', e.target.value)}
+                />
               </TableCell>
             </TableRow>
             <TableRow>
               <TableCell></TableCell>
               <TableCell>주민번호</TableCell>
               <TableCell alignment="left">
-                <Input type="text" name="ssnFront" width="40%" />
+                <Input
+                  type="text"
+                  name="ssnFront"
+                  width="40%"
+                  value={formData.residentNumberFront}
+                  onChange={(e) => updateField('residentNumberFront', e.target.value)}
+                />
                 <span style={{ marginInline: "5px" }}>-</span>
-                <Input type="password" name="ssnBack" width="45%" />
+                <Input
+                  type="password"
+                  name="ssnBack"
+                  width="45%"
+                  value={formData.residentNumberBack}
+                  onChange={(e) => updateField('residentNumberBack', e.target.value)}
+                />
               </TableCell>
               <TableCell>국적</TableCell>
               <TableCell alignment="left">
-                <Input type="text" name="national" width="100%" />
+                <Input
+                  type="text"
+                  name="national"
+                  width="100%"
+                  value={formData.nationality}
+                  onChange={(e) => updateField('nationality', e.target.value)}
+                />
               </TableCell>
             </TableRow>
             <TableRow>
               <TableCell>*</TableCell>
               <TableCell>전화번호</TableCell>
               <TableCell alignment="left">
-                <select name="phoneFront">
+                <select
+                  name="phoneFront"
+                  value={formData.phoneNumberFront}
+                  onChange={(e) => updateField('phoneNumberFront', e.target.value)}
+                >
                   <option value={"010"}>010</option>
                   <option value={"011"}>011</option>
                   <option value={"016"}>016</option>
@@ -190,6 +286,8 @@ function TalentInfo({ valueApply }: TalentInfoProps) {
                   name="phoneMiddle"
                   width="25%"
                   required={true}
+                  value={formData.phoneNumberMiddle}
+                  onChange={(e) => updateField('phoneNumberMiddle', e.target.value)}
                 />
                 <span style={{ marginInline: "5px" }}>-</span>
                 <Input
@@ -197,6 +295,8 @@ function TalentInfo({ valueApply }: TalentInfoProps) {
                   name="phoneBack"
                   width="25%"
                   required={true}
+                  value={formData.phoneNumberBack}
+                  onChange={(e) => updateField('phoneNumberBack', e.target.value)}
                 />
               </TableCell>
               <TableCell>생년월일</TableCell>
@@ -206,6 +306,8 @@ function TalentInfo({ valueApply }: TalentInfoProps) {
                   width="100%"
                   name="birthday"
                   alignment="center"
+                  value={formData.birthDate}
+                  onChange={(e) => updateField('birthday', e.target.value)}
                 />
               </TableCell>
             </TableRow>
@@ -213,7 +315,14 @@ function TalentInfo({ valueApply }: TalentInfoProps) {
               <TableCell>*</TableCell>
               <TableCell>주소</TableCell>
               <TableCell alignment="left" colSpan={2}>
-                <Input type="text" name="address" width="100%" required={true} />
+                <Input
+                  type="text"
+                  name="address"
+                  width="100%"
+                  required={true}
+                  value={formData.address}
+                  onChange={(e) => updateField('address', e.target.value)}
+                />
               </TableCell>
               <TableCell alignment="right">
                 <ButtonZipCode onClick={handleZipCode} />
@@ -223,14 +332,27 @@ function TalentInfo({ valueApply }: TalentInfoProps) {
               <TableCell>*</TableCell>
               <TableCell>이메일</TableCell>
               <TableCell alignment="left" colSpan={2}>
-                <Input type="text" name="email" width="100%" required={true} />
+                <Input
+                  type="text"
+                  name="email"
+                  width="100%"
+                  required={true}
+                  value={formData.email}
+                  onChange={(e) => updateField('email', e.target.value)}
+                />
               </TableCell>
             </TableRow>
             <TableRow>
               <TableCell>*</TableCell>
               <TableCell>자격구분</TableCell>
               <TableCell alignment="left">
-                <Input width="80%" name="qualification" required={true} />
+                <Input
+                  width="80%"
+                  name="qualification"
+                  required={true}
+                  value={formData.qualificationType}
+                  onChange={(e) => updateField('qualificationType', e.target.value)}
+                />
               </TableCell>
               <TableCell>기사취득년월</TableCell>
               <TableCell>
@@ -239,6 +361,8 @@ function TalentInfo({ valueApply }: TalentInfoProps) {
                   width="100%"
                   name="acquireDay"
                   alignment="center"
+                  value={formData.qualificationCode}
+                  onChange={(e) => updateField('qualificationCode', e.target.value)}
                 />
               </TableCell>
             </TableRow>
@@ -247,20 +371,37 @@ function TalentInfo({ valueApply }: TalentInfoProps) {
               <TableCell>소속사</TableCell>
               <TableCell alignment="left">
                 <Div alignment="left">
-                  <Input width="60%" name="company" required={true} />
+                  <Input
+                    width="60%"
+                    name="company"
+                    required={true}
+                    value={formData.company}
+                    onChange={(e) => updateField('company', e.target.value)}
+                  />
                   <StyledFaSistrix />
                 </Div>
               </TableCell>
               <TableCell>전공</TableCell>
               <TableCell>
-                <Input width="100%" name="major" />
+                <Input
+                  width="100%"
+                  name="major"
+                  value={formData.major}
+                  onChange={(e) => updateField('major', e.target.value)}
+                />
               </TableCell>
             </TableRow>
             <TableRow>
               <TableCell></TableCell>
               <TableCell>기타 스킬</TableCell>
               <TableCell colSpan={3}>
-                <Input type="text" width="100%" name="skill" />
+                <Input
+                  type="text"
+                  width="100%"
+                  name="skill"
+                  value={formData.additionalSkills}
+                  onChange={(e) => updateField('additionalSkills', e.target.value)}
+                />
               </TableCell>
             </TableRow>
             <TableRow>
@@ -272,6 +413,8 @@ function TalentInfo({ valueApply }: TalentInfoProps) {
                   width="32%"
                   name="assessCode"
                   required={true}
+                  value={formData.evaluationCode}
+                  onChange={(e) => updateField('evaluationCode', e.target.value)}
                 />
               </TableCell>
             </TableRow>
@@ -279,21 +422,38 @@ function TalentInfo({ valueApply }: TalentInfoProps) {
               <TableCell></TableCell>
               <TableCell>평가내용</TableCell>
               <TableCell colSpan={3} alignment="left">
-                <Input type="text" width="100%" name="assessContent" />
+                <Input
+                  type="text"
+                  width="100%"
+                  name="assessContent"
+                  value={formData.evaluationContent}
+                  onChange={(e) => updateField('evaluationContent', e.target.value)}
+                />
               </TableCell>
             </TableRow>
             <TableRow>
               <TableCell></TableCell>
               <TableCell>블랙리스트 여부</TableCell>
               <TableCell colSpan={3} alignment="left">
-                <Input type="checkbox" name="bListIsChecked" />
+                <Input
+                  type="checkbox"
+                  name="bListIsChecked"
+                  checked={formData.isBlacklisted}
+                  onChange={(e) => updateField('isBlacklisted', e.target.checked)}
+                />
               </TableCell>
             </TableRow>
             <TableRow>
               <TableCell></TableCell>
               <TableCell>블랙 사유</TableCell>
               <TableCell colSpan={3} alignment="left">
-                <Input type="text" name="bListReason" width="100%" />
+                <Input
+                  type="text"
+                  name="bListReason"
+                  width="100%"
+                  value={formData.blacklistReason}
+                  onChange={(e) => updateField('blacklistReason', e.target.value)}
+                />
               </TableCell>
             </TableRow>
             <TableRow>
@@ -301,7 +461,13 @@ function TalentInfo({ valueApply }: TalentInfoProps) {
               <TableCell>프로필</TableCell>
               <TableCell colSpan={3} alignment="left">
                 <Div alignment="space-between">
-                  <Input type="text" name="profile" width="88%" />
+                  <Input
+                    type="text"
+                    name="profile"
+                    width="88%"
+                    value={formData.profile}
+                    onChange={(e) => updateField('profile', e.target.value)}
+                  />
                   <ButtonChoose width="65px" onClick={handleChoose} />
                 </Div>
               </TableCell>

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 import ButtonCRUD from '../Buttons/ButtonCRUD';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { deleteTalent } from '../../apis/api/DELETE/deleteTalent';
 import { mapAllTalent } from '../../apis/services/mapAllTalent';
 import { mapTalentByName } from '../../apis/services/mapTalentByName';
@@ -56,15 +56,23 @@ const Buttons = styled.div`
 `;
 
 function Controller({ setTalents, checkTalent }: ControllerProps) {
+  const navigate = useNavigate();
   const [talName, setTalName] = useState('');
   const [comName, setComName] = useState('');
 
-  // 체크한 데이터 로그 출력 (테스트)
-  useEffect(() => {
-    if (checkTalent) {
-      console.log('체크된 인재 : ', checkTalent);
+  // 수정 버튼 클릭 시
+  const handleUpdate = () => {
+    // 수정할 인재 선택되었는지 검사
+    if (!checkTalent) {
+        alert("수정할 인재를 선택해주세요.");
+        return;
+    } else {
+        navigate(
+            './popup',
+            { state: {title: '수정', valueApply: '수정', checkTalent: checkTalent} }
+        );
     }
-  }, [checkTalent]);
+  }
 
   // 조회 버튼 클릭 시
   const handleRead = async () => {
@@ -127,22 +135,15 @@ function Controller({ setTalents, checkTalent }: ControllerProps) {
         <Div alignment="end">
           <Buttons>
             <Link
-              to={{
-                pathname: './popup',
-                search: '?valueApply=등록신청',
-              }}
+                to={'./popup'}
+                state={{
+                    title: '등록',
+                    valueApply: '등록신청'
+                }}
             >
               <ButtonCRUD valueCRUD="신규" />
             </Link>
-            <Link
-              to={{
-                pathname: './popup',
-                search: '?valueApply=수정',
-                state: { talent: checkTalent },
-              } as any}
-            >
-              <ButtonCRUD valueCRUD="수정" />
-            </Link>
+            <ButtonCRUD valueCRUD="수정" onClick={handleUpdate}/>
             <ButtonCRUD valueCRUD="삭제" onClick={handleDelete} />
             <ButtonCRUD valueCRUD="조회" onClick={handleRead} />
           </Buttons>

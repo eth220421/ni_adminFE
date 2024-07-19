@@ -8,10 +8,10 @@ const FormWrapper = styled.div`
     width: 100%;
 `
 
-function Form({ valueApply }: FormProps) {
+function Form({ valueApply, checkTalent }: FormProps) {
     return (
         <FormWrapper>
-            <TalentInfo valueApply={valueApply} />
+            <TalentInfo valueApply={valueApply} checkTalent={checkTalent} />
         </FormWrapper>
     );
 }

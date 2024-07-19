@@ -8,9 +8,8 @@ const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
+  // log 중복 출력을 위해 <React.StrictMode> 제거
+  <App />
 );
 
 // If you want to start measuring performance in your app, pass a function
