@@ -4,7 +4,7 @@ import styled from "styled-components";
 import Controller from "../components/Controller/Controller";
 import TalentChart from "../components/Table/TalentChart";
 import { TalentObj } from "../interfaces/TalentObj";
-import { mapAllTalent } from "../apis/services/mapAllTalent";
+import { fetchData } from "../hooks/fetchs/fetchData";
 
 const TalentPageWrapper = styled.div`
   width: 100%;
@@ -25,13 +25,7 @@ function TalentPage() {
 
   // 초기 렌더링 시 모든 회원 정보 출력
   useEffect(() => {
-    const fetchData = async () => {
-      // GET All Talent
-      const dataList: TalentObj[] = await mapAllTalent();
-      setTalents(dataList);
-    }
-
-    fetchData();
+    fetchData(setTalents);
   }, [])
   
   return (

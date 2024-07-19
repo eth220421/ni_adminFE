@@ -8,7 +8,7 @@ const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 root.render(
-  // log 중복 출력을 위해 <React.StrictMode> 제거
+  // log 중복 출력 방지를 위해 <React.StrictMode> 제거
   <App />
 );
 
